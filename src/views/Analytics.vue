@@ -2,9 +2,38 @@
   <div class="container">
     <h1>This is an orderBook analytics page</h1>
 
-    <div class="btn-group">
-      <button class="btn btn-primary" @click="startSync">Start</button>
-      <button class="btn btn-danger" :class="{ disabled: !started }" @click="stopSync">Stop</button>
+<!--    <pre>{{ atTheHelm }}</pre>-->
+
+    <div>
+      <b-jumbotron>
+        <div>
+          <b-button-toolbar key-nav aria-label="Start/stop parsing data">
+            <b-button-group class="mx-1">
+              <b-button @click="startSync">Start</b-button>
+              <b-button :class="{ disabled: !started }" @click="stopSync">Stop</b-button>
+            </b-button-group>
+          </b-button-toolbar>
+        </div>
+      </b-jumbotron>
+    </div>
+
+    <div>
+      <b-card-group deck>
+        <b-card
+            header="Total sell size"
+            header-tag="header"
+        >
+          <b-card-text><h2>{{ totalSellSize }} <b-badge v-if="atTheHelm === 'bears'">{{ advantages }}%</b-badge></h2></b-card-text>
+        </b-card>
+
+        <b-card
+            header="Total buy size"
+            header-tag="header"
+        >
+          <b-card-text><h2>{{ totalBuySize }} <b-badge v-if="atTheHelm === 'bulls'">{{ advantages }}%</b-badge></h2></b-card-text>
+        </b-card>
+
+      </b-card-group>
     </div>
 
     <div class="container">
@@ -55,6 +84,38 @@
             sortable: true,
           },
         ],
+        totalSellSize: 0,
+        totalBuySize: 0,
+        atTheHelm: 'bulls',
+      }
+    },
+
+    watch: {
+      'orderBook.sell': {
+        handler(val){
+          this.totalSellSize = _.sumBy(val, 'size');
+        },
+        deep: true
+      },
+
+      'orderBook.buy': {
+        handler(val){
+          this.totalBuySize = _.sumBy(val, 'size');
+        },
+        deep: true
+      }
+    },
+
+    computed: {
+      advantages: function () {
+        let result = {};
+        if (this.totalBuySize > this.totalSellSize) {
+          this.atTheHelm = 'bulls';
+          return _.round((this.totalBuySize / this.totalSellSize) * 100 - 100, 2)
+        } else {
+          this.atTheHelm = 'bears';
+          return _.round((this.totalSellSize / this.totalBuySize) * 100 - 100, 2)
+        }
       }
     },
 
@@ -126,6 +187,7 @@
 <style lang="sass">
   td
     padding: 0 !important
+    font-size: 0.6rem
     &.minified
       font-size: 0.5em
       width: 30px

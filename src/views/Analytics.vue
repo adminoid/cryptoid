@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="container">
     <h1>This is an orderBook analytics page</h1>
 
     <div class="btn-group">
@@ -7,20 +7,17 @@
       <button class="btn btn-danger" :class="{ disabled: !started }" @click="stopSync">Stop</button>
     </div>
 
-    <table class="table table-condensed">
-      <thead>
-      <tr>
-        <th>B</th>
-        <th>S</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>{{ orderBook.buy }}</td>
-        <td>{{ orderBook.sell }}</td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <b-table size="xs" striped hover :items="orderBook.sell" :fields="fields"></b-table>
+        </div>
+
+        <div class="col-sm">
+          <b-table size="xs" striped hover :items="orderBook.buy" :fields="fields"></b-table>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -40,6 +37,24 @@
         },
         socket: {},
         started: false,
+        fields: [
+          {
+            key: 'id',
+            class: 'minified',
+          },
+          {
+            key: 'side',
+            class: 'minified',
+          },
+          {
+            key: 'size',
+            sortable: true,
+          },
+          {
+            key: 'price',
+            sortable: true,
+          },
+        ],
       }
     },
 
@@ -109,8 +124,10 @@
 </script>
 
 <style lang="sass">
-
-  #main-table
-    font-size: 0.7em
-
+  td
+    padding: 0 !important
+    &.minified
+      font-size: 0.5em
+      width: 30px
 </style>
+

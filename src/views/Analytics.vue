@@ -8,6 +8,9 @@
 </template>
 
 <script>
+
+  import _ from 'lodash';
+
   export default {
 
     data () {
@@ -24,13 +27,14 @@
 
     mounted() {
 
-      setTimeout(() => {
-        this.socket.close();
-      }, 5000)
+      // setTimeout(() => {
+      //   this.socket.close();
+      // }, 7000);
 
     },
 
     methods: {
+
       initSocket() {
         this.socket = new WebSocket(this.socketUrl);
         this.socket.onopen = () => {
@@ -44,9 +48,18 @@
           if (response.action === 'partial') {
             self.initOrderBook(response.data);
           } else if (response.action === 'update') {
-            console.info('update information');
+            const dataForUpdate = response.data;
+
+            _.map(dataForUpdate, item => {
+              self.update(item);
+            });
           }
         };
+      },
+
+      update(newItem) {
+        let localItem = _.find(this.orderBook, ['id', newItem.id]);
+        _.merge(localItem, newItem);
       },
 
       initOrderBook (data) {

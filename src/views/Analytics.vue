@@ -39,7 +39,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm">
-          <b-table size="xs" striped hover :items="orderBook.sell" :fields="fields"></b-table>
+          <b-table striped hover :items="orderBook.sell" :fields="fields"></b-table>
         </div>
 
         <div class="col-sm">
@@ -78,6 +78,7 @@
           {
             key: 'size',
             sortable: true,
+            class: 'test-' + 3,
           },
           {
             key: 'price',
@@ -94,6 +95,14 @@
       'orderBook.sell': {
         handler(val){
           this.totalSellSize = _.sumBy(val, 'size');
+          let sells = _.sortBy(_.clone(this.orderBook.sell), 'size');
+          let maxSizeItems = sells.slice(Math.max(sells.length - 5, 1));
+          _.map(this.orderBook.sell, item => {
+            delete item._rowVariant;
+          });
+          _.map(maxSizeItems, item => {
+            item._rowVariant = 'danger';
+          });
         },
         deep: true
       },
@@ -101,6 +110,14 @@
       'orderBook.buy': {
         handler(val){
           this.totalBuySize = _.sumBy(val, 'size');
+          let buys = _.sortBy(_.clone(this.orderBook.buy), 'size');
+          let maxSizeItems = buys.slice(Math.max(buys.length - 5, 1));
+          _.map(this.orderBook.buy, item => {
+            delete item._rowVariant;
+          });
+          _.map(maxSizeItems, item => {
+            item._rowVariant = 'danger';
+          });
         },
         deep: true
       }

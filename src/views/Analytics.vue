@@ -195,6 +195,33 @@
             _.map(dataForUpdate, item => {
               self.update(item);
             });
+          } else if (response.action === 'delete') {
+
+            const dataForRemove = response.data;
+
+            _.map(dataForRemove, item => {
+              if (item.side === 'Sell') {
+                _.remove(self.orderBook.sell, itemOrig => {
+                  return itemOrig.id === item.id;
+                });
+              } else {
+                _.remove(self.orderBook.buy, itemOrig => {
+                  return itemOrig.id === item.id;
+                });
+              }
+            });
+
+          } else if (response.action === 'insert') {
+
+            const dataForInsert = response.data;
+            _.map(dataForInsert, item => {
+              if (item.side === 'Sell') {
+                self.orderBook.sell.push(item);
+              } else {
+                self.orderBook.buy.push(item);
+              }
+            });
+
           } else {
             console.info(response);
           }

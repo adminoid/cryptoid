@@ -18,7 +18,7 @@
 
             <div class="col-sm">
 
-              <h2>Place for testing orders</h2>
+              <order-panel/>
 
             </div>
           </div>
@@ -64,8 +64,14 @@
 <script>
 
   import _ from 'lodash';
+  import OrderPanel from '@/components/OrderPanel.vue'
+
 
   export default {
+
+    components: {
+      OrderPanel
+    },
 
     data () {
       return {

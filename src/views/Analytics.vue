@@ -2,18 +2,28 @@
   <div class="container">
     <h1>This is an orderBook analytics page</h1>
 
-<!--    <pre>{{ atTheHelm }}</pre>-->
-
-    <div>
+    <div class="wrapper">
       <b-jumbotron>
-        <div>
-          <b-button-toolbar key-nav aria-label="Start/stop parsing data">
-            <b-button-group class="mx-1">
-              <b-button @click="startSync">Start</b-button>
-              <b-button :class="{ disabled: !started }" @click="stopSync">Stop</b-button>
-            </b-button-group>
-          </b-button-toolbar>
+
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+              <b-button-toolbar key-nav aria-label="Start/stop parsing data">
+                <b-button-group class="mx-1">
+                  <b-button @click="startSync">Start</b-button>
+                  <b-button :class="{ disabled: !started }" @click="stopSync">Stop</b-button>
+                </b-button-group>
+              </b-button-toolbar>
+            </div>
+
+            <div class="col-sm">
+
+              <h2>Place for testing orders</h2>
+
+            </div>
+          </div>
         </div>
+
       </b-jumbotron>
     </div>
 
@@ -179,6 +189,8 @@
             _.map(dataForUpdate, item => {
               self.update(item);
             });
+          } else {
+            console.info(response);
           }
         };
       },
@@ -208,5 +220,14 @@
     &.minified
       font-size: 0.5em
       width: 30px
+  /*.candlestick*/
+  /*  position: absolute*/
+  /*  right: 0*/
+  /*  top: 0*/
+  /*  bottom: 0*/
+  /*  background: aliceblue*/
+  /*  width: 82%*/
+  .wrapper
+    position: relative
 </style>
 

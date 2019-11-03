@@ -73,7 +73,7 @@
               {{ data.item.size }} <b-badge>{{ data.item.percent }}</b-badge>
             </template>
             <template v-slot:cell(order)="data">
-              <a href="#" @click.prevent="makeOrder(data.item.side, data.item.price)"> [-] </a>
+              <a href="#" @click.prevent="makeOrder(data.item.side, data.item.price)"> [ - ] </a>
             </template>
           </b-table>
         </div>
@@ -84,7 +84,7 @@
               {{ data.item.size }} <b-badge>{{ data.item.percent }}</b-badge>
             </template>
             <template v-slot:cell(order)="data">
-              <a href="#" @click.prevent="makeOrder(data.item.side, data.item.price)"> [+] </a>
+              <a href="#" @click.prevent="makeOrder(data.item.side, data.item.price)"> [ + ] </a>
             </template>
           </b-table>
         </div>

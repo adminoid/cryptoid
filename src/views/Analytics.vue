@@ -17,7 +17,27 @@
 
             <div class="col-sm">
 
-              <order-panel/>
+              <b-form inline>
+                <label for="qty">
+                  Qty
+                </label>
+                <b-input
+                    v-model="qty"
+                    id="qty"
+                    class="mb-1 mr-sm-1 mb-sm-0"
+                    placeholder="qty"
+                ></b-input>
+
+                <label for="risk-level">
+                  Risk
+                </label>
+                <b-input
+                    v-model="risk"
+                    id="risk-level"
+                    class="mb-1 mr-sm-1 mb-sm-0"
+                    placeholder="risk"
+                ></b-input>
+              </b-form>
 
             </div>
           </div>
@@ -25,8 +45,6 @@
 
       </b-jumbotron>
     </div>
-
-<!--    <candle :price="price"/>-->
 
     <div>
       <b-card-group deck>
@@ -73,19 +91,13 @@
 <script>
 
   import _ from 'lodash';
-  import OrderPanel from '@/components/OrderPanel.vue'
-  import Candle from '@/components/Candle.vue'
-
 
   export default {
 
-    components: {
-      OrderPanel,
-      Candle,
-    },
-
     data () {
       return {
+        risk: 5,
+        qty: 2,
         socketUrl: 'wss://www.bitmex.com/realtime',
         orderBook: {
           sell: [],
@@ -293,5 +305,9 @@
     .badge
       font-weight: bold
       font-size: 1em
+  #risk-level,#qty
+    width: 50px
+    margin-left: 5px
+
 </style>
 

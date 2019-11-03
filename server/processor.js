@@ -1,5 +1,5 @@
 module.exports = {
-  limitOrder: function (price, quantity) {
+  limitOrder: function (price, quantity, type, side) {
     const request = require('request');
     const crypto = require('crypto');
 
@@ -9,7 +9,7 @@ module.exports = {
     const verb = 'POST',
       path = '/api/v1/order',
       expires = Math.round(new Date().getTime() / 1000) + 60, // 1 min in the future
-      data = {symbol:"XBTUSD",orderQty:quantity,price:price,ordType:"Limit"};
+      data = {symbol:"XBTUSD",orderQty:quantity,price:price,ordType:type,side:side};
 
     // Pre-compute the postBody so we can be sure that we're using *exactly* the same body in the request
     // and in the signature. If you don't do this, you might get differently-sorted keys and blow the signature.

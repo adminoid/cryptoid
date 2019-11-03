@@ -9,7 +9,8 @@ http.createServer(function (req, res) {
 
   if(url ==='/buy-one-dollar') {
 
-    processor.limitOrder(3000, 2);
+    processor.limitOrder(3000, 1, 'Limit', 'Buy');
+    processor.limitOrder(12000, 1, 'Limit', 'Sell');
 
     res.end();
 

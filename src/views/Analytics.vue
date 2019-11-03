@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <h1>This is an orderBook analytics page</h1>
-
+    <h1>OrderBook analytics</h1>
     <div class="wrapper">
       <b-jumbotron>
 
@@ -27,6 +26,8 @@
       </b-jumbotron>
     </div>
 
+<!--    <candle :price="price"/>-->
+
     <div>
       <b-card-group deck>
         <b-card
@@ -49,11 +50,19 @@
     <div class="container">
       <div class="row">
         <div class="col-sm">
-          <b-table striped hover :items="orderBook.sell" :fields="fields"></b-table>
+          <b-table striped hover :items="orderBook.sell" :fields="fields">
+            <template v-slot:cell(size)="data">
+              {{ data.item.size }} <b-badge>{{ data.item.percent }}</b-badge>
+            </template>
+          </b-table>
         </div>
 
         <div class="col-sm">
-          <b-table size="xs" striped hover :items="orderBook.buy" :fields="fields"></b-table>
+          <b-table striped hover :items="orderBook.buy" :fields="fields">
+            <template v-slot:cell(size)="data">
+              {{ data.item.size }} <b-badge>{{ data.item.percent }}</b-badge>
+            </template>
+          </b-table>
         </div>
       </div>
     </div>
@@ -65,12 +74,14 @@
 
   import _ from 'lodash';
   import OrderPanel from '@/components/OrderPanel.vue'
+  import Candle from '@/components/Candle.vue'
 
 
   export default {
 
     components: {
-      OrderPanel
+      OrderPanel,
+      Candle,
     },
 
     data () {
@@ -104,6 +115,10 @@
         totalSellSize: 0,
         totalBuySize: 0,
         atTheHelm: 'bulls',
+        price: {
+          sell: 0,
+          buy: 0,
+        }
       }
     },
 
@@ -114,11 +129,15 @@
           let sells = _.sortBy(_.clone(this.orderBook.sell), 'size');
           let maxSizeItems = sells.slice(Math.max(sells.length - 5, 1));
           _.map(this.orderBook.sell, item => {
+            delete item.percent;
             delete item._rowVariant;
           });
+          let sellSizeAverage = _.meanBy(this.orderBook.sell, (item) => item.size);
           _.map(maxSizeItems, item => {
+            item.percent = this.advantage(sellSizeAverage, item.size) + '%';
             item._rowVariant = 'danger';
           });
+          this.price.sell = _.pick(_.maxBy(this.orderBook.sell, 'price'), 'price');
         },
         deep: true
       },
@@ -129,11 +148,16 @@
           let buys = _.sortBy(_.clone(this.orderBook.buy), 'size');
           let maxSizeItems = buys.slice(Math.max(buys.length - 5, 1));
           _.map(this.orderBook.buy, item => {
+            delete item.percent;
             delete item._rowVariant;
           });
+
+          let buySizeAverage = _.meanBy(this.orderBook.buy, (item) => item.size);
           _.map(maxSizeItems, item => {
+            item.percent = this.advantage(buySizeAverage, item.size) + '%';
             item._rowVariant = 'danger';
           });
+          this.price.buy = _.pick(_.maxBy(this.orderBook.buy, 'price'), 'price');
         },
         deep: true
       }
@@ -141,7 +165,6 @@
 
     computed: {
       advantages: function () {
-        let result = {};
         if (this.totalBuySize > this.totalSellSize) {
           this.atTheHelm = 'bulls';
           return _.round((this.totalBuySize / this.totalSellSize) * 100 - 100, 2)
@@ -153,6 +176,10 @@
     },
 
     methods: {
+
+      advantage(avg, big) {
+        return _.round((big / avg) * 100 - 100)
+      },
 
       stopSync() {
         if (!this.started) return;
@@ -253,14 +280,18 @@
     &.minified
       font-size: 0.5em
       width: 30px
-  /*.candlestick*/
-  /*  position: absolute*/
-  /*  right: 0*/
-  /*  top: 0*/
-  /*  bottom: 0*/
-  /*  background: aliceblue*/
-  /*  width: 82%*/
   .wrapper
     position: relative
+    padding-top: 0
+    .jumbotron
+      padding: 1em
+  .badge
+    background: #ff5c52
+    position: relative
+    top: -3px
+  table
+    .badge
+      font-weight: bold
+      font-size: 1em
 </style>
 

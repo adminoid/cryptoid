@@ -72,6 +72,9 @@
             <template v-slot:cell(size)="data">
               {{ data.item.size }} <b-badge>{{ data.item.percent }}</b-badge>
             </template>
+            <template v-slot:cell(order)="data">
+              <a href="#" @click.prevent="makeOrder(data.item.side, data.item.price)"> [-] </a>
+            </template>
           </b-table>
         </div>
 
@@ -79,6 +82,9 @@
           <b-table striped hover :items="orderBook.buy" :fields="fields">
             <template v-slot:cell(size)="data">
               {{ data.item.size }} <b-badge>{{ data.item.percent }}</b-badge>
+            </template>
+            <template v-slot:cell(order)="data">
+              <a href="#" @click.prevent="makeOrder(data.item.side, data.item.price)"> [+] </a>
             </template>
           </b-table>
         </div>
@@ -122,6 +128,9 @@
           {
             key: 'price',
             sortable: true,
+          },
+          {
+            key: 'order',
           },
         ],
         totalSellSize: 0,
@@ -188,6 +197,11 @@
     },
 
     methods: {
+
+      makeOrder(side, price) {
+        console.log(side, price);
+        console.log(this.risk, this.qty);
+      },
 
       advantage(avg, big) {
         return _.round((big / avg) * 100 - 100)

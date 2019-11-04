@@ -97,6 +97,7 @@
 <script>
 
   import _ from 'lodash';
+  import axios from 'axios';
 
   export default {
 
@@ -199,8 +200,23 @@
     methods: {
 
       makeOrder(side, price) {
-        console.log(side, price);
-        console.log(this.risk, this.qty);
+        // console.log(side, price);
+        // console.log(this.risk, this.qty);
+
+        axios.post('http://localhost:3000/make-order', {
+          side: side,
+          price: price,
+          risk: this.risk,
+          qty: this.qty,
+
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
       },
 
       advantage(avg, big) {

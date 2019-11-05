@@ -37,6 +37,16 @@
                     class="mb-1 mr-sm-1 mb-sm-0"
                     placeholder="risk"
                 ></b-input>
+
+                <label for="profit">
+                  Profit
+                </label>
+                <b-input
+                    v-model="profit"
+                    id="profit"
+                    class="mb-1 mr-sm-1 mb-sm-0"
+                    placeholder="profit"
+                ></b-input>
               </b-form>
 
             </div>
@@ -105,6 +115,7 @@
       return {
         risk: 5,
         qty: 2,
+        profit: 10,
         socketUrl: 'wss://www.bitmex.com/realtime',
         orderBook: {
           sell: [],
@@ -200,15 +211,13 @@
     methods: {
 
       makeOrder(side, price) {
-        // console.log(side, price);
-        // console.log(this.risk, this.qty);
 
         axios.post('http://localhost:3000/make-order', {
           side: side,
           price: price,
           risk: this.risk,
           qty: this.qty,
-
+          profit: this.profit,
         })
           .then(function (response) {
             console.log(response);
@@ -335,7 +344,7 @@
     .badge
       font-weight: bold
       font-size: 1em
-  #risk-level,#qty
+  #risk-level,#qty,#profit
     width: 50px
     margin-left: 5px
 

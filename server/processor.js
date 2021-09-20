@@ -3,8 +3,8 @@ module.exports = {
     const request = require('request');
     const crypto = require('crypto');
 
-    const apiKey = "W2Z3rYqP95dtnmAQ6YAQKHIY";
-    const apiSecret = "Bh7Z_SLNBVkvez8ZH-fRRnWVUeui8X9X4D8NqPPGJ7DC7Jyo";
+    const apiKey = "xxx";
+    const apiSecret = "yyy";
 
     const verb = 'POST',
       path = '/api/v1/order',
